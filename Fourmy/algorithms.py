@@ -38,17 +38,6 @@ NB_LAST_SCREENS = 4
 SIZE_IMG = (80, 80)
 
 
-# Note: if you want to see you agent act in real time, set force_fps to False.
-# But don't use this setting for learning, just for display purposes.
-
-# 1) In s, choose a (GLIE actor)
-# 2) Observe r, s′
-# 3) Temporal difference:
-# delta = r + self.GAMMA*maxa′Q(s′,a′)−Q(s,a)δ=r+γmaxa′Q(s′,a′)−Q(s,a)
-# 4) Update Q :  Q(s,a) ← Q(s,a) + αδQ(s,a) ← Q(s,a)+αδ
-# 5) s <- s′
-
-
 class ReplayMemory:
 
     def __init__(self, batch_size, max_size):
@@ -100,7 +89,6 @@ class DeepQLearning:
     TARGET_FREQ = 2500
 
     MIN_REPLAY_MEMORY_SIZE = int(2e4)
-    # MAX_REPLAY_MEMORY_SIZE = int(5e4)
     BATCH_SIZE = 32
 
     GAMMA = 0.99  # discount factor
@@ -149,7 +137,7 @@ class DeepQLearning:
                 scores = []
 
             p.reset_game()
-            self.game.getGameState()
+            game.getGameState()
             screen = self.process_screen(p.getScreenRGB())
             last_screens_buff = deque([screen]*4, maxlen=NB_LAST_SCREENS)
             last_screens = np.stack(last_screens_buff, axis=-1)

@@ -36,12 +36,12 @@ def test_play(agent, game, n, accelerated=False):
 if __name__ == '__main__':
     game = FlappyBird()
 
-    agent = FeaturesLambdaSarsa()
+    # agent = FeaturesLambdaSarsa()
     # agent = FeaturesNeuralQLearning()
-    # agent = DeepQLearning()
+    agent = DeepQLearning()
 
-    # agent.train(True, game, DISPLAY)
+    agent.train(True, game, DISPLAY)
     agent.load()
 
     average_score, max_score, min_score = test_play(agent, game, 10, True)
-    # test_play(agent, game, 2, False)
+    test_play(agent, game, 2, False)
