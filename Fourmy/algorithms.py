@@ -19,7 +19,7 @@ from utils import (myround, delete_files, init_train, print_scores,
                    update_epsilon)
 
 
-DISPLAY = True
+DISPLAY = False
 if not DISPLAY:
     os.environ['SDL_VIDEODRIVER'] = 'dummy'
 
@@ -187,8 +187,8 @@ class DeepQLearning:
                     self.model.train_on_batch(x=ls, y=qvals)
 
                     if step % self.TARGET_FREQ == 0:
-                        self.model.save(filepath=self.DATA_DIREC+'target.h5')
-                        self.model_target = load_model(filepath=self.DATA_DIREC+'target.h5')
+                        self.model.save(filepath=self.DATA_DIREC+'_target.h5')
+                        self.model_target = load_model(filepath=self.DATA_DIREC+'_target.h5')
 
                 last_screens_buff.append(screen_new)
                 last_screens = np.stack(last_screens_buff, axis=-1)
@@ -475,7 +475,7 @@ class FeaturesLambdaSarsa:
             while not p.game_over():
                 step += 1
                 if step != 0 and (step % self.SAVE_FREQ) == 0:
-                    self.save('Q_' + chr(97+nb_save) + '_' + str(step) +
+                    self.save(chr(97+nb_save) + '_' + str(step) +
                               '_' + str(nb_games) + '.p')
                     nb_save += 1
                 if step != 0 and (step % self.EPS_UPDATE_FREQ) == 0:
@@ -516,7 +516,7 @@ class FeaturesLambdaSarsa:
 
         t2 = time.time()
         # Unicode code point of a: 97
-        self.save('Q_' + chr(97+nb_save) + '_' + str(step) +
+        self.save(chr(97+nb_save) + '_' + str(step) +
                   '_' + str(nb_games) + '.p')
         print()
         print('Number of played games:', nb_games)

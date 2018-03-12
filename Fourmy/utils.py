@@ -32,7 +32,8 @@ def init_train(fname, data_direc):
         nb_save = 0
         nb_games = 0
     else:
-        nb_save, curr_frame, nb_games = fname.split('_')[1:]
+        print(fname)
+        nb_save, curr_frame, nb_games = fname.split('_')
         nb_save = ord(nb_save) - 97  # !!
         curr_frame, nb_games = int(curr_frame), int(nb_games)
         f0 = curr_frame
