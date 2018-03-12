@@ -19,7 +19,7 @@ from utils import (myround, delete_files, init_train, print_scores,
                    update_epsilon)
 
 
-DISPLAY = True
+DISPLAY = False
 if not DISPLAY:
     os.environ['SDL_VIDEODRIVER'] = 'dummy'
 
@@ -187,8 +187,8 @@ class DeepQLearning:
                     self.model.train_on_batch(x=ls, y=qvals)
 
                     if step % self.TARGET_FREQ == 0:
-                        self.model.save(filepath=self.DATA_DIREC+'target.h5')
-                        self.model_target = load_model(filepath=self.DATA_DIREC+'target.h5')
+                        self.model.save(filepath=self.DATA_DIREC+'_target.h5')
+                        self.model_target = load_model(filepath=self.DATA_DIREC+'_target.h5')
 
                 last_screens_buff.append(screen_new)
                 last_screens = np.stack(last_screens_buff, axis=-1)
