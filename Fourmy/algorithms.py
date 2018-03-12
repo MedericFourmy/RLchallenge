@@ -92,7 +92,7 @@ class DeepQLearning:
     BATCH_SIZE = 32
 
     GAMMA = 0.99  # discount factor
-    UP_PROBA = 0.2
+    UP_PROBA = 0.4
     EPS0 = 0.4
     EPS_RATE = 8
     ALPHA = 0.2  # learning rate
@@ -128,6 +128,10 @@ class DeepQLearning:
         else:
             delete_files(self.DATA_DIREC)
         f0, step, nb_save, nb_games = init_train(fname, self.DATA_DIREC)
+        if not scratch:
+            # to initialize again the replay memory
+            self.NB_FRAMES += self.MIN_REPLAY_MEMORY_SIZE
+            self.MIN_REPLAY_MEMORY_SIZE = step + self.MIN_REPLAY_MEMORY_SIZE
 
         eps_tau = (self.NB_FRAMES - f0)//self.EPS_RATE
         scores = []
@@ -159,6 +163,8 @@ class DeepQLearning:
 
                 # 1) In s, choose a (GLIE actor)
                 qvals = self.get_qvals(last_screens)
+                if step < self.MIN_REPLAY_MEMORY_SIZE:
+                    self.epsilon = 1
                 act = self.greedy_action(qvals, self.epsilon)
 
                 # 2) Observe r, s′
@@ -203,7 +209,7 @@ class DeepQLearning:
                 return None
             files_without_ext = [f.split('.')[0] for f in files]
             name = max(files_without_ext)
-            self.model.load_model(os.path.join(self.DATA_DIREC, name+'.h5'))
+            self.model = load_model(os.path.join(self.DATA_DIREC, name+'.h5'))
 
             print('###########')
             print('File loaded: ', name)
