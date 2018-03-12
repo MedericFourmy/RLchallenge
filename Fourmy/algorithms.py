@@ -475,7 +475,7 @@ class FeaturesLambdaSarsa:
             while not p.game_over():
                 step += 1
                 if step != 0 and (step % self.SAVE_FREQ) == 0:
-                    self.save('Q_' + chr(97+nb_save) + '_' + str(step) +
+                    self.save(chr(97+nb_save) + '_' + str(step) +
                               '_' + str(nb_games) + '.p')
                     nb_save += 1
                 if step != 0 and (step % self.EPS_UPDATE_FREQ) == 0:
@@ -516,7 +516,7 @@ class FeaturesLambdaSarsa:
 
         t2 = time.time()
         # Unicode code point of a: 97
-        self.save('Q_' + chr(97+nb_save) + '_' + str(step) +
+        self.save(chr(97+nb_save) + '_' + str(step) +
                   '_' + str(nb_games) + '.p')
         print()
         print('Number of played games:', nb_games)
@@ -536,7 +536,9 @@ class FeaturesLambdaSarsa:
         return tuple(state[feature] for feature in self.STATES_USED)
 
     def reward_engineering(self, reward):
-        return reward
+        if reward < 0:
+            return -1000
+        return 100*reward
 
     def save(self, name):
         with open(os.path.join(self.DATA_DIREC, name), 'bw') as f:
