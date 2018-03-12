@@ -19,7 +19,7 @@ from utils import (myround, delete_files, init_train, print_scores,
                    update_epsilon)
 
 
-DISPLAY = False
+DISPLAY = True
 if not DISPLAY:
     os.environ['SDL_VIDEODRIVER'] = 'dummy'
 
@@ -89,11 +89,12 @@ class DeepQLearning:
     TARGET_FREQ = 2500
 
     MIN_REPLAY_MEMORY_SIZE = int(2e4)
+    MAX_REPLAY_MEMORY_SIZE = int(6e4)
     BATCH_SIZE = 32
 
     GAMMA = 0.99  # discount factor
-    UP_PROBA = 0.4
-    EPS0 = 0.4
+    UP_PROBA = 0.2
+    EPS0 = 0.8
     EPS_RATE = 8
     ALPHA = 0.2  # learning rate
 
@@ -103,7 +104,7 @@ class DeepQLearning:
         self.epsilon = self.EPS0
         self.model = self.create_model(*SIZE_IMG)
         self.model_target = self.create_model(*SIZE_IMG)
-        self.replay_memory = ReplayMemory(self.BATCH_SIZE, None)
+        self.replay_memory = ReplayMemory(self.BATCH_SIZE, self.MAX_REPLAY_MEMORY_SIZE)
 
     def get_qvals(self, last_screens):
         return self.model.predict(np.array([last_screens]))
@@ -537,8 +538,8 @@ class FeaturesLambdaSarsa:
 
     def reward_engineering(self, reward):
         if reward < 0:
-            return -1000
-        return 100*reward
+            return -100
+        return 1000*reward
 
     def save(self, name):
         with open(os.path.join(self.DATA_DIREC, name), 'bw') as f:
